@@ -11,7 +11,7 @@ export type Ejercicio = {
   errores: string[];
 };
 
-export const EJERCICIOS: Ejercicio[] = [
+const EJERCICIOS_BASE: Ejercicio[] = [
   {
     id: 'press-banca',
     nombre: 'Press de banca',
@@ -31,7 +31,7 @@ export const EJERCICIOS: Ejercicio[] = [
   },
   {
     id: 'sentadilla',
-    nombre: 'Sentadilla',
+    nombre: 'Sentadilla', 
     principales: ['cuadriceps', 'gluteos'],
     secundarios: ['isquiotibiales', 'lumbares'],
     posicionInicial:
@@ -70,3 +70,7 @@ export const ejerciciosPorMusculo = (id: MuscleId) =>
   EJERCICIOS.filter((e) => e.principales.includes(id) || e.secundarios.includes(id));
 
 export const buscarEjercicio = (id: string) => EJERCICIOS.find((e) => e.id === id);
+
+import { EJERCICIOS_EXTRA } from './exercises-extra';
+
+export const EJERCICIOS: Ejercicio[] = [...EJERCICIOS_BASE, ...EJERCICIOS_EXTRA];

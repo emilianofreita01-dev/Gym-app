@@ -7,7 +7,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style="light" />
-      <Drawer
+      <Drawer backBehavior="history"
         screenOptions={{
           swipeEnabled: false,
           headerStyle: { backgroundColor: colors.background },
@@ -29,6 +29,7 @@ export default function RootLayout() {
       <Drawer.Screen name="ejercicio/[id]" options={{ title: "Ejercicio", drawerItemStyle: { display: "none" } }} />
       <Drawer.Screen name="zona/[id]" options={{ title: "Zona", drawerItemStyle: { display: "none" } }} />
         <Drawer.Screen name="musculo/[id]" options={{ title: "Ejercicios", drawerItemStyle: { display: "none" } }} />
+      <Drawer.Screen name="entrenar/[id]" options={{ title: "Entrenar", drawerItemStyle: { display: "none" } }} />
       </Drawer>
     </GestureHandlerRootView>
   );
