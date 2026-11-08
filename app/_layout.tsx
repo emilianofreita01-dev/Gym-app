@@ -26,6 +26,9 @@ export default function RootLayout() {
         <Drawer.Screen name="comunidad" options={{ title: 'Comunidad', drawerLabel: 'Comunidad' }} />
         <Drawer.Screen name="perfil" options={{ title: 'Mi perfil', drawerLabel: 'Mi perfil' }} />
         <Drawer.Screen name="plus" options={{ title: 'Plus', drawerLabel: 'Plus' }} />
+      <Drawer.Screen name="ejercicio/[id]" options={{ title: "Ejercicio", drawerItemStyle: { display: "none" } }} />
+      <Drawer.Screen name="zona/[id]" options={{ title: "Zona", drawerItemStyle: { display: "none" } }} />
+        <Drawer.Screen name="musculo/[id]" options={{ title: "Ejercicios", drawerItemStyle: { display: "none" } }} />
       </Drawer>
     </GestureHandlerRootView>
   );
