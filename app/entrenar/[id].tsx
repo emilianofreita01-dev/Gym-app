@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { buscarEjercicio } from '../../src/data/exercises';
 import { useStore } from '../../src/store/useStore';
+import Descanso from '../../src/components/Descanso';
+import UltimaVez from '../../src/components/UltimaVez';
 import { colors, radius, spacing } from '../../src/theme/theme';
 
 type Fila = { peso: string; reps: string };
@@ -61,10 +63,12 @@ export default function Entrenar() {
   };
 
   return (
+    <View style={styles.raiz}>
     <ScrollView
       style={styles.pantalla}
       contentContainerStyle={styles.contenido}
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
     >
       <Pressable onPress={volver}>
         <Text style={styles.volver}>← Volver</Text>
@@ -78,6 +82,7 @@ export default function Entrenar() {
         return (
           <View key={ejId} style={styles.bloque}>
             <Text style={styles.nombre}>{ej.nombre}</Text>
+            <UltimaVez ejercicioId={ejId} />
             <View style={styles.fila}>
               <Text style={[styles.cabecera, styles.colSerie]}>Serie</Text>
               <Text style={[styles.cabecera, styles.colCampo]}>Kg</Text>
@@ -115,10 +120,13 @@ export default function Entrenar() {
         <Text style={styles.terminarTexto}>Terminar entrenamiento</Text>
       </Pressable>
     </ScrollView>
+    <Descanso />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  raiz: { flex: 1, backgroundColor: colors.background },
   pantalla: { flex: 1, backgroundColor: colors.background },
   contenido: { padding: spacing.lg, paddingBottom: spacing.xl * 2 },
   centro: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },

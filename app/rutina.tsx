@@ -5,17 +5,25 @@ import { EJERCICIOS, buscarEjercicio } from '../src/data/exercises';
 import { useStore } from '../src/store/useStore';
 import { colors, radius, spacing } from '../src/theme/theme';
 
+const normalizar = (t: string) =>
+  t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
 export default function Rutina() {
   const rutinas = useStore((s) => s.rutinas);
   const crearRutina = useStore((s) => s.crearRutina);
   const borrarRutina = useStore((s) => s.borrarRutina);
+  const quitarEjercicio = useStore((s) => s.quitarEjercicio);
 
   const [creando, setCreando] = useState(false);
   const [nombre, setNombre] = useState('');
   const [elegidos, setElegidos] = useState<string[]>([]);
   const [abierta, setAbierta] = useState<string | null>(null);
+  const [busqueda, setBusqueda] = useState('');
 
   const puedeGuardar = nombre.trim().length > 0 && elegidos.length > 0;
+  const filtrados = EJERCICIOS.filter((e) =>
+    normalizar(e.nombre).includes(normalizar(busqueda.trim()))
+  );
 
   const alternar = (id: string) =>
     setElegidos((actual) =>
@@ -26,6 +34,7 @@ export default function Rutina() {
     setCreando(false);
     setNombre('');
     setElegidos([]);
+    setBusqueda('');
   };
 
   const guardar = () => {
@@ -40,11 +49,18 @@ export default function Rutina() {
       { text: 'Borrar', style: 'destructive', onPress: () => borrarRutina(id) },
     ]);
 
+  const confirmarQuitar = (rutinaId: string, ejercicioId: string, nombreEj: string) =>
+    Alert.alert('Quitar ejercicio', `¿Quitar "${nombreEj}" de esta rutina?`, [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Quitar', style: 'destructive', onPress: () => quitarEjercicio(rutinaId, ejercicioId) },
+    ]);
+
   return (
     <ScrollView
       style={styles.pantalla}
       contentContainerStyle={styles.contenido}
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
     >
       <Text style={styles.titulo}>Mi rutina</Text>
 
@@ -63,8 +79,19 @@ export default function Rutina() {
             placeholder="Nombre de la rutina"
             placeholderTextColor={colors.textMuted}
           />
-          <Text style={styles.etiqueta}>Elige los ejercicios</Text>
-          {EJERCICIOS.map((e) => {
+          <Text style={styles.etiqueta}>Elige los ejercicios ({elegidos.length} seleccionados)</Text>
+          <TextInput
+            style={[styles.input, { marginBottom: spacing.sm }]}
+            value={busqueda}
+            onChangeText={setBusqueda}
+            placeholder="Buscar ejercicio"
+            placeholderTextColor={colors.textMuted}
+            autoCorrect={false}
+          />
+          {filtrados.length === 0 && (
+            <Text style={styles.vacio}>No hay ejercicios con ese nombre.</Text>
+          )}
+          {filtrados.map((e) => {
             const activo = elegidos.includes(e.id);
             return (
               <Pressable key={e.id} style={styles.opcion} onPress={() => alternar(e.id)}>
@@ -120,7 +147,9 @@ export default function Rutina() {
                       onPress={() => router.push({ pathname: '/ejercicio/[id]', params: { id } })}
                     >
                       <Text style={styles.opcionTexto}>{ej.nombre}</Text>
-                      <Text style={styles.flecha}>›</Text>
+                      <Pressable hitSlop={12} onPress={() => confirmarQuitar(r.id, id, ej.nombre)}>
+                        <Text style={styles.quitar}>✕</Text>
+                      </Pressable>
                     </Pressable>
                   );
                 })}
@@ -221,5 +250,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
+  quitar: { fontSize: 18, color: colors.textMuted, paddingLeft: spacing.md },
   borrar: { marginTop: spacing.md, color: colors.accent, fontSize: 14, fontWeight: '600' },
 });

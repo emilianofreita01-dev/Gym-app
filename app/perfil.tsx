@@ -40,6 +40,7 @@ export default function Perfil() {
       style={styles.pantalla}
       contentContainerStyle={styles.contenido}
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
     >
       <Text style={styles.titulo}>{nombre.trim() ? `Hola, ${nombre.trim()}` : 'Mi perfil'}</Text>
 

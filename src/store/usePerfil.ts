@@ -7,6 +7,11 @@ type Perfil = { nombre: string; setNombre: (nombre: string) => void };
 export const usePerfil = create<Perfil>()(
   persist(
     (set) => ({ nombre: '', setNombre: (nombre) => set({ nombre }) }),
-    { name: 'gym-perfil', storage: createJSONStorage(() => AsyncStorage) }
+    {
+      name: 'gym-perfil',
+      version: 1,
+      storage: createJSONStorage(() => AsyncStorage),
+      migrate: (guardado) => guardado as Perfil,
+    }
   )
 );

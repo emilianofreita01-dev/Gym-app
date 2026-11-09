@@ -73,4 +73,6 @@ export const buscarEjercicio = (id: string) => EJERCICIOS.find((e) => e.id === i
 
 import { EJERCICIOS_EXTRA } from './exercises-extra';
 
-export const EJERCICIOS: Ejercicio[] = [...EJERCICIOS_BASE, ...EJERCICIOS_EXTRA];
+import { EJERCICIOS_EXTRA_2 } from './exercises-extra-2';
+
+export const EJERCICIOS: Ejercicio[] = [...EJERCICIOS_BASE, ...EJERCICIOS_EXTRA, ...EJERCICIOS_EXTRA_2];
